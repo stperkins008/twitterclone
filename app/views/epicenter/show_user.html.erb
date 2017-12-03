@@ -1,0 +1,33 @@
+<h1> @<%= @user.username %>'s Profile and Tweets</h1>
+
+<h4><%= @user.name %></h4>
+<h4><%= @user.location %></h4>
+<h5><%= @user.bio %></h5>
+
+<%= link_to "Followers", followers_path(id: @user.id), class: "btn btn-default" %>
+<%= link_to "Following", following_path(id: @user.id), class: "btn btn-default" %>
+
+<p>
+	<% if current_user.following.include?(@user.id) %>
+		<%= link_to "Following", unfollow_path(id: @user.id), class: "btn btn-primary", id: "unfollow-btn" %>
+	<% else %>
+		<% if current_user.id != @user.id %>
+			<%= link_to "Follow", following_path(id: @user.id), class: "btn btn-primary" %>
+		<% end %>	
+	<% end %>
+</p> 
+
+<% @user.tweets.order(created_at: :desc).each do |tweet| %>
+	<div class="well">
+		<p>
+			<%= image_tag tweet.user.avatar.url, size: 25 %>
+			<%= tweet.user.name %>
+			@<%= tweet.user.username %>
+			• <%= time_ago_in_words(tweet.created_at) %>
+		</p>
+
+			<p>
+			<%= tweet.message.html_safe %>
+		</p>
+	</div>
+<% end %>

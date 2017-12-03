@@ -1,0 +1,22 @@
+<h1>@<%= current_user.username %>'s Twitter Feed</h1>
+
+<%= render 'tweets/form', tweet: @tweet %>
+
+<h3>Here is what your "friends" are saying: </h3>
+
+<% @following_tweets.reverse_each do |x| %>
+
+	<div class="well">
+		<p>
+			<%= image_tag x.user.avatar.url, size: 25 %>
+			<%= x.user.name %>
+			<%= link_to "@#{x.user.username}", show_user_path(id: x.user.id) %>
+			• <%= time_ago_in_words(x.created_at) %>
+		</p>
+		<p>
+			<%= x.message.html_safe %>
+		</p>
+
+	</div>
+
+<% end %>
